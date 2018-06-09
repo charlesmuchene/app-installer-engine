@@ -1,9 +1,9 @@
-package com.charlesmuchene.installer
+package com.charlesmuchene.installer.models
 
 /**
  * User actions
  */
-enum class UserActions {
+enum class UserAction {
 
     ConnectWifi, AddAccount, InstallApp;
 

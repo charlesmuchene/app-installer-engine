@@ -1,8 +1,11 @@
-package com.charlesmuchene.installer
+package com.charlesmuchene.installer.ui
 
+import com.charlesmuchene.installer.Runner
+import com.charlesmuchene.installer.models.UserAction
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
+import java.awt.Insets
 import javax.swing.*
 
 /**
@@ -10,11 +13,12 @@ import javax.swing.*
  */
 class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
 
-    private val screenSize = Dimension(400, 200)
+    private val screenSize = Dimension(600, 400)
+    private var output = StringBuilder()
 
     private val outputArea = JTextArea()
-    private val allButton = JButton("All")
     private val wifiButton = JButton("Connect Wi-Fi")
+    private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
     private val installButton = JButton("Install SB app")
 
@@ -39,9 +43,21 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
      * Set up listeners
      */
     private fun setUpListeners() {
-        wifiButton.addActionListener { runner.runUserAction(UserActions.ConnectWifi) }
-        accountButton.addActionListener { runner.runUserAction(UserActions.AddAccount) }
-        installButton.addActionListener { runner.runUserAction(UserActions.InstallApp) }
+        wifiButton.addActionListener { performAction(UserAction.ConnectWifi) }
+        accountButton.addActionListener { performAction(UserAction.AddAccount) }
+        installButton.addActionListener { performAction(UserAction.InstallApp) }
+    }
+
+    /**
+     * Perform user action
+     *
+     * @param action [UserAction] to perform
+     */
+    private fun performAction(action: UserAction) {
+        runner.runUserAction(action)?.let {
+            output.append(it).append("\n")
+            outputArea.text = output.toString()
+        }
     }
 
     /**
@@ -54,11 +70,11 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
         val wifiButtonConstraints = constraints.apply {
             gridx = 3
             gridy = 3
+            weightx = 1.0
+            weighty = 0.0
             gridwidth = 5
             gridheight = 2
             fill = GridBagConstraints.BOTH
-            weightx = 1.0
-            weighty = 0.0
             anchor = GridBagConstraints.WEST
         }
         layout.setConstraints(wifiButton, wifiButtonConstraints)
@@ -67,11 +83,11 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
         val accountButtonConstraints = constraints.apply {
             gridx = 9
             gridy = 3
+            weightx = 1.0
+            weighty = 0.0
             gridwidth = 5
             gridheight = 2
             fill = GridBagConstraints.BOTH
-            weightx = 1.0
-            weighty = 0.0
             anchor = GridBagConstraints.CENTER
         }
         layout.setConstraints(accountButton, accountButtonConstraints)
@@ -80,27 +96,42 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
         val installButtonConstraints = constraints.apply {
             gridx = 15
             gridy = 3
+            weightx = 1.0
+            weighty = 0.0
             gridwidth = 5
             gridheight = 2
             fill = GridBagConstraints.BOTH
-            weightx = 1.0
-            weighty = 0.0
-            anchor = GridBagConstraints.EAST
+            anchor = GridBagConstraints.CENTER
         }
         layout.setConstraints(installButton, installButtonConstraints)
         add(installButton)
 
+        val allButtonConstraints = constraints.apply {
+            gridx = 21
+            gridy = 3
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.EAST
+        }
+        layout.setConstraints(allButton, allButtonConstraints)
+        allButton.isEnabled = false
+        add(allButton)
+
         val outputAreaConstraints = constraints.apply {
             gridx = 3
-            gridy = 9
-            gridwidth = 18
-            gridheight = 11
-            fill = GridBagConstraints.BOTH
+            gridy = 15
             weightx = 1.0
             weighty = 1.0
+            gridwidth = 24
+            gridheight = 11
+            fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.CENTER
         }
         layout.setConstraints(outputArea, outputAreaConstraints)
+        outputArea.margin = Insets(4, 4, 4, 4)
         add(outputArea)
     }
 

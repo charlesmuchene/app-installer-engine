@@ -1,7 +1,7 @@
-package com.charlesmuchene.installer
+package com.charlesmuchene.installer.models
 
 /**
- * Installer system actions
+ * System actions
  */
 enum class SystemActions {
 

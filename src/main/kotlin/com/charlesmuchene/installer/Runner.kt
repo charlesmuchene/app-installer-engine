@@ -1,5 +1,7 @@
 package com.charlesmuchene.installer
 
+import com.charlesmuchene.installer.models.SystemActions
+import com.charlesmuchene.installer.models.UserAction
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -11,25 +13,22 @@ class Runner {
     /**
      * Run user action
      *
-     * @param action [UserActions] instance
+     * @param action [UserAction] instance
+     * @return Output
      */
-    fun runUserAction(action: UserActions) {
-        runProcess(action.getCommand())
-
-        // TODO Display output
-    }
+    fun runUserAction(action: UserAction): String? = runProcess(action.getCommand())
 
     /**
      * Run system action
      *
      * @param action [SystemActions] instance
+     * @return Output
      */
-    fun runSystemAction(action: SystemActions) {
+    fun runSystemAction(action: SystemActions): String? {
         val (actionOne, actionTwo) = action.getCommands()
-        runProcess(actionOne)
-        runProcess(actionTwo)
-
-        // TODO Display output
+        val resultOne = runProcess(actionOne)
+        val resultTwo = runProcess(actionTwo)
+        return resultOne + resultTwo
     }
 
     /**
@@ -45,7 +44,7 @@ class Runner {
             val process = builder.start()
             val reader = BufferedReader(InputStreamReader(process.inputStream))
             val reduce = reader.lines().reduce { t: String?, u: String? -> "$t\n$u" }
-            output = reduce.get()
+            output = if (reduce.isPresent) reduce.get() else "SB Installer: Unknown error"
             process.waitFor()
             process.destroy()
         } catch (e: Exception) {

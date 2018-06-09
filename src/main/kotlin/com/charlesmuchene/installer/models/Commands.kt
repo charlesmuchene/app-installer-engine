@@ -1,5 +1,8 @@
-package com.charlesmuchene.installer
+package com.charlesmuchene.installer.models
 
+/**
+ * Installer/Automator commands
+ */
 object Commands {
 
     private const val androidJunitRunner = "com.charlesmuchene.installer.test/android.support.test.runner.AndroidJUnitRunner"
@@ -14,8 +17,12 @@ object Commands {
     val installApp = (automatorRunner + "'com.charlesmuchene.installer.InstallerAutomator#installApp'") +
             androidJunitRunner
 
+    // TODO Determine the path of Installer app
+
     val pushInstaller = arrayOf("adb", "push", "path_to_debug.apk", "/data/local/tmp/com.charlesmuchene.installer")
     val installInstaller = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "\"/data/local/tmp/com.charlesmuchene.installer\"")
+
+    // TODO Determine the path of the Automator app
 
     val pushAutomator = arrayOf("adb", "push", "path_to_test.apk", "/data/local/tmp/com.charlesmuchene.installer.test")
     val installAutomator = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "\"/data/local/tmp/com.charlesmuchene.installer.test\"")
