@@ -3,9 +3,9 @@ package com.charlesmuchene.installer.models
 /**
  * System actions
  */
-enum class SystemActions {
+enum class SystemAction {
 
-    InitializeInstaller, InitializeAutomator;
+    InitializeInstaller, InitializeAutomator, InstallApplication;
 
     /**
      * Get system action commands
@@ -15,5 +15,6 @@ enum class SystemActions {
     fun getCommands(): Pair<Array<String>, Array<String>> = when (this) {
         InitializeInstaller -> Pair(Commands.pushInstaller, Commands.installInstaller)
         InitializeAutomator -> Pair(Commands.pushAutomator, Commands.installAutomator)
+        InstallApplication -> Pair(Commands.pushSBDriverApp, Commands.installSBDriverApp)
     }
 }

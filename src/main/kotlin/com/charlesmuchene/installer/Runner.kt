@@ -1,6 +1,6 @@
 package com.charlesmuchene.installer
 
-import com.charlesmuchene.installer.models.SystemActions
+import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -21,10 +21,10 @@ class Runner {
     /**
      * Run system action
      *
-     * @param action [SystemActions] instance
+     * @param action [SystemAction] instance
      * @return Output
      */
-    fun runSystemAction(action: SystemActions): String? {
+    fun runSystemAction(action: SystemAction): String? {
         val (actionOne, actionTwo) = action.getCommands()
         val resultOne = runProcess(actionOne)
         val resultTwo = runProcess(actionTwo)

@@ -1,5 +1,6 @@
 package com.charlesmuchene.installer
 
+import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.ui.HomeScreen
 import javax.swing.UIManager
 
@@ -13,10 +14,11 @@ class Application {
         @JvmStatic
         fun main(args: Array<String>) {
             val runner = Runner()
-//            with(runner) {
-//                runSystemAction(SystemActions.InitializeInstaller)
-//                runSystemAction(SystemActions.InitializeAutomator)
-//            }
+            with(runner) {
+                runSystemAction(SystemAction.InitializeInstaller)
+                runSystemAction(SystemAction.InitializeAutomator)
+                runSystemAction(SystemAction.InstallApplication)
+            }
             showUI(runner)
         }
 

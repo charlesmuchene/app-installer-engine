@@ -17,10 +17,11 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
     private var output = StringBuilder()
 
     private val outputArea = JTextArea()
+    private val closeButton = JButton("Close")
     private val wifiButton = JButton("Connect Wi-Fi")
     private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
-    private val installButton = JButton("Install SB app")
+    private val installButton = JButton("Install SB App")
 
     init {
         defaultCloseOperation = EXIT_ON_CLOSE
@@ -44,8 +45,9 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
      */
     private fun setUpListeners() {
         wifiButton.addActionListener { performAction(UserAction.ConnectWifi) }
-        accountButton.addActionListener { performAction(UserAction.AddAccount) }
         installButton.addActionListener { performAction(UserAction.InstallApp) }
+        closeButton.addActionListener { performAction(UserAction.ResetDeviceBridge) }
+        accountButton.addActionListener { performAction(UserAction.AddGoogleAccount) }
     }
 
     /**
@@ -120,12 +122,26 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
         allButton.isEnabled = false
         add(allButton)
 
+        val closeButtonConstraints = constraints.apply {
+            gridx = 26
+            gridy = 3
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.EAST
+        }
+        layout.setConstraints(closeButton, closeButtonConstraints)
+        closeButton.isEnabled = false
+        add(closeButton)
+
         val outputAreaConstraints = constraints.apply {
             gridx = 3
             gridy = 15
             weightx = 1.0
             weighty = 1.0
-            gridwidth = 24
+            gridwidth = 30
             gridheight = 11
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.CENTER

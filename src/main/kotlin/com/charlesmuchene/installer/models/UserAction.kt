@@ -5,7 +5,7 @@ package com.charlesmuchene.installer.models
  */
 enum class UserAction {
 
-    ConnectWifi, AddAccount, InstallApp;
+    ConnectWifi, AddGoogleAccount, ResetDeviceBridge;
 
     /**
      * Get action command
@@ -14,8 +14,8 @@ enum class UserAction {
      */
     fun getCommand(): Array<String> = when (this) {
         ConnectWifi -> Commands.connectToWifi
-        AddAccount -> Commands.addAccount
-        InstallApp -> Commands.installApp
+        AddGoogleAccount -> Commands.addGoogleAccount
+        ResetDeviceBridge -> Commands.resetDeviceBridge
     }
 
 }
