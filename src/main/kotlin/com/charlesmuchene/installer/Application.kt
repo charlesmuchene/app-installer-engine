@@ -14,11 +14,11 @@ class Application {
         @JvmStatic
         fun main(args: Array<String>) {
             val runner = Runner()
-            with(runner) {
-                runSystemAction(SystemAction.InitializeInstaller)
-                runSystemAction(SystemAction.InitializeAutomator)
-                runSystemAction(SystemAction.InstallApplication)
-            }
+//            with(runner) {
+//                runSystemAction(SystemAction.InitializeInstaller)
+//                runSystemAction(SystemAction.InitializeAutomator)
+//                runSystemAction(SystemAction.InstallApplication)
+//            }
             showUI(runner)
         }
 

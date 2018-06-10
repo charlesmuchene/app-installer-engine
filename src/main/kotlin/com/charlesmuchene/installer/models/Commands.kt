@@ -6,7 +6,7 @@ package com.charlesmuchene.installer.models
 object Commands {
 
     private const val androidJunitRunner = "com.charlesmuchene.installer.test/android.support.test.runner.AndroidJUnitRunner"
-    private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "debug", "false", "-e", "class")
+    private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
 
     val resetDeviceBridge = (automatorRunner + createAutomatorCommand("reset")) + androidJunitRunner
 
@@ -38,6 +38,10 @@ object Commands {
      * @param subCommand
      * @return Command
      */
-    private fun createAutomatorCommand(subCommand: String): String =
-            "'com.charlesmuchene.installer.InstallerAutomator#$subCommand'"
+    private fun createAutomatorCommand(subCommand: String = ""): String {
+        val klass = "'com.charlesmuchene.installer.InstallerAutomator"
+        val method = if (subCommand.isBlank()) "'" else "#$subCommand'"
+        return "$klass$method"
+    }
+
 }
