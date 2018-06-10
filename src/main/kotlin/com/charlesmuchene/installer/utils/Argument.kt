@@ -5,33 +5,34 @@ import java.util.*
 /**
  * Application arguments
  */
-enum class Arguments {
+enum class Argument {
 
     NETWORK_SSID, NETWORK_PASSWORD, ACCOUNT_EMAIL, ACCOUNT_PASSWORD;
 
     /**
      * Get fully parsed app argument
      *
-     * @param properties Arguments
+     * @param properties Argument
      * @return An array representing argument
      */
-    @Throws()
     fun getArguments(properties: Properties): Array<String> {
+        val key = getKey(this)
+        val value = properties.getProperty(key)
         return when (this) {
-            NETWORK_SSID -> arrayOf("-e", "network_ssid", properties)
-            ACCOUNT_EMAIL -> arrayOf("-e", "account_email", properties)
-            NETWORK_PASSWORD -> arrayOf("-e", "network_password", properties)
-            ACCOUNT_PASSWORD -> arrayOf("-e", "account_password", properties)
+            NETWORK_SSID -> arrayOf("-e", key, value)
+            ACCOUNT_EMAIL -> arrayOf("-e", key, value)
+            NETWORK_PASSWORD -> arrayOf("-e", key, value)
+            ACCOUNT_PASSWORD -> arrayOf("-e", key, value)
         }
     }
 
     /**
-     * Get the key for the given [Arguments]
+     * Get the key for the given [Argument]
      *
-     * @param argument [Arguments] instance
+     * @param argument [Argument] instance
      * @return Key corresponding to the argument
      */
-    private fun getKey(argument: Arguments) = when (argument) {
+    private fun getKey(argument: Argument) = when (argument) {
         NETWORK_SSID -> "network_ssid"
         ACCOUNT_EMAIL -> "account_email"
         NETWORK_PASSWORD -> "network_password"
