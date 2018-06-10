@@ -3,9 +3,9 @@
 package com.charlesmuchene.installer.utils
 
 /**
- * Add any new arguments to the Constants file in the Installer Automator app
+ * Automator arguments moved to Argument class
  */
-const val NETWORK_SSID = "network_ssid"
-const val ACCOUNT_EMAIL = "account_email"
-const val NETWORK_PASSWORD = "network_password"
-const val ACCOUNT_PASSWORD = "account_password"
+
+const val CHECKER_PATH_KEY = "checker_path"
+const val AUTOMATOR_PATH_KEY = "automator_path"
+const val SB_DRIVER_PATH_KEY = "sb_driver_path"
