@@ -1,6 +1,7 @@
 package com.charlesmuchene.installer.ui
 
 import com.charlesmuchene.installer.Runner
+import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
 import java.awt.Dimension
 import java.awt.GridBagConstraints
@@ -11,9 +12,9 @@ import javax.swing.*
 /**
  * Home screen
  */
-class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
+class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(600, 400))
+    : JFrame("SB Installer Engine") {
 
-    private val screenSize = Dimension(600, 400)
     private var output = StringBuilder()
 
     private val outputArea = JTextArea()
@@ -44,10 +45,10 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
      * Set up listeners
      */
     private fun setUpListeners() {
-        wifiButton.addActionListener { performAction(UserAction.ConnectWifi) }
-        installButton.addActionListener { performAction(UserAction.InstallApp) }
-        closeButton.addActionListener { performAction(UserAction.ResetDeviceBridge) }
-        accountButton.addActionListener { performAction(UserAction.AddGoogleAccount) }
+        wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
+        closeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
+        accountButton.addActionListener { performUserAction(UserAction.AddGoogleAccount) }
+        installButton.addActionListener { performSystemAction(SystemAction.InstallApplication) }
     }
 
     /**
@@ -55,11 +56,17 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
      *
      * @param action [UserAction] to perform
      */
-    private fun performAction(action: UserAction) {
-        runner.runUserAction(action)?.let {
-            output.append(it).append("\n")
-            outputArea.text = output.toString()
-        }
+    private fun performUserAction(action: UserAction) {
+        runner.runUserAction(action)?.let(::addOutput)
+    }
+
+    /**
+     * Perform system action
+     *
+     * @param action [SystemAction] to perform
+     */
+    private fun performSystemAction(action: SystemAction) {
+        runner.runSystemAction(action)?.let(::addOutput)
     }
 
     /**
@@ -151,4 +158,13 @@ class HomeScreen(private val runner: Runner) : JFrame("SB Installer") {
         add(outputArea)
     }
 
+    /**
+     * Display output
+     *
+     * @param content Content to show
+     */
+    fun addOutput(content: String) {
+        output.append(content).append("\n")
+        outputArea.text = output.toString()
+    }
 }
