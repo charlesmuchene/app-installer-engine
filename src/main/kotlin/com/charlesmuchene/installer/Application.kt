@@ -2,6 +2,7 @@ package com.charlesmuchene.installer
 
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.ui.HomeScreen
+import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
 /**
@@ -10,13 +11,15 @@ import javax.swing.UIManager
 object Application {
 
     private val homeScreen: HomeScreen by lazy { HomeScreen(runner) }
-    private val runner: Runner by lazy { Runner() }
+    private val runner: Runner by lazy(LazyThreadSafetyMode.NONE) { Runner() }
 
     @JvmStatic
     fun main(args: Array<String>) {
-        showUI()
-        runInitializationSequence()
-        homeScreen.enableUI(true)
+        SwingUtilities.invokeLater {
+            showUI()
+            runInitializationSequence()
+            homeScreen.enableUI(true)
+        }
     }
 
     /**
