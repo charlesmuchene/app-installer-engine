@@ -11,7 +11,7 @@ object Commands {
 
     private val properties: Properties = loadConfiguration()
 
-    private const val androidJunitRunner = "com.charlesmuchene.installer.test/android.support.test.runner.InstallerRunner"
+    private const val androidJunitRunner = "com.charlesmuchene.installer.test/com.charlesmuchene.installer.InstallerRunner"
     private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
 
     val resetDeviceBridge = automatorRunner
