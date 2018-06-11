@@ -1,6 +1,7 @@
 package com.charlesmuchene.installer.models
 
 import com.charlesmuchene.installer.utils.*
+import java.io.File
 import java.util.*
 
 /**
@@ -10,7 +11,7 @@ object Commands {
 
     private val properties: Properties = loadConfiguration()
 
-    private const val androidJunitRunner = "com.charlesmuchene.installer.test/android.support.test.runner.AndroidJUnitRunner"
+    private const val androidJunitRunner = "com.charlesmuchene.installer.test/android.support.test.runner.InstallerRunner"
     private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
 
     val resetDeviceBridge = automatorRunner
@@ -29,17 +30,17 @@ object Commands {
             .plus(Argument.ACCOUNT_EMAIL.getArguments(properties))
             .plus(androidJunitRunner)
 
-    val pushChecker = arrayOf("adb", "push", properties.getProperty(CHECKER_PATH_KEY),
+    val pushChecker = arrayOf("adb", "push", File(properties.getProperty(CHECKER_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.charlesmuchene.installer")
     val installChecker = arrayOf("adb", "shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer\"")
 
-    val pushAutomator = arrayOf("adb", "push", properties.getProperty(AUTOMATOR_PATH_KEY),
+    val pushAutomator = arrayOf("adb", "push", File(properties.getProperty(AUTOMATOR_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.charlesmuchene.installer.test")
     val installAutomator = arrayOf("adb", "shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer.test\"")
 
-    val pushSBDriverApp = arrayOf("adb", "push", properties.getProperty(SB_DRIVER_PATH_KEY),
+    val pushSBDriverApp = arrayOf("adb", "push", File(properties.getProperty(SB_DRIVER_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.safeboda.driver")
     val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")
