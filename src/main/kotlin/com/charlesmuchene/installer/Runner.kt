@@ -17,7 +17,7 @@ class Runner {
      * @param action [UserAction] instance
      * @return Output
      */
-    fun runUserAction(action: UserAction): String? = runProcess(action.getCommand())
+    fun runUserAction(action: UserAction, vararg values: String): String? = runProcess(action.getCommand(*values))
 
     /**
      * Run system action

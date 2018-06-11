@@ -10,17 +10,18 @@ enum class UserAction {
     /**
      * Get action command
      *
+     * @param values Value for the commands
      * @return Action command
      */
-    fun getCommand(): Array<String> = when (this) {
+    fun getCommand(vararg values: String): Array<String> = when (this) {
         ConnectWifi -> Commands.connectToWifi
-        AddGoogleAccount -> Commands.addGoogleAccount
         ResetDeviceBridge -> Commands.resetDeviceBridge
+        AddGoogleAccount -> Commands.getGoogleAccountCommand(values[0], values[1])
     }
 
     /**
      * To string
      */
-    override fun toString(): String = getCommand().reduce { a, b -> "$a $b" }
+    override fun toString(): String = getCommand("", "").reduce { a, b -> "$a $b" }
 
 }

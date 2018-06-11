@@ -19,7 +19,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private val statusLabel: JLabel by lazy {
         JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
     }
-    private val closeButton = JButton("Close")
+    private val closeBridgeButton = JButton("Finish")
     private val emailTextField = JTextField("Email")
     private val launchButton = JButton("Launch SB")
     private val wifiButton = JButton("Connect Wi-Fi")
@@ -56,7 +56,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     fun enableUI(enable: Boolean) {
         wifiButton.isEnabled = enable
-        closeButton.isEnabled = enable
+        closeBridgeButton.isEnabled = enable
         accountButton.isEnabled = enable
         installButton.isEnabled = enable
         showBusy(!enable)
@@ -77,9 +77,12 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Set up listeners
      */
     private fun setUpListeners() {
-        accountButton.addActionListener { performUserAction(UserAction.AddGoogleAccount) }
-        closeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
+        closeBridgeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
         wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
+
+        accountButton.addActionListener {
+            validateInput().let { performUserAction(UserAction.AddGoogleAccount, *it) }
+        }
 
         installButton.addActionListener {
             performSystemAction(SystemAction.InitializeInstaller)
@@ -93,14 +96,33 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     }
 
     /**
+     * Validate user input
+     *
+     * @return [Pair] of email and password
+     */
+    private fun validateInput(): Array<String> {
+        val email = emailTextField.text
+        if (email.isBlank()) {
+            addOutput("Add a valid email address")
+            return emptyArray()
+        }
+        val password = passwordTextField.text
+        if (password.isBlank()) {
+            addOutput("Add a valid password")
+            return emptyArray()
+        }
+        return arrayOf(email, password)
+    }
+
+    /**
      * Perform user action
      *
      * @param action [UserAction] to perform
      */
-    private fun performUserAction(action: UserAction) {
+    private fun performUserAction(action: UserAction, vararg values: String) {
         showBusy(true)
         addOutput("Installer Running: $action")
-        runner.runUserAction(action)?.let(::addOutput)
+        runner.runUserAction(action, *values)?.let(::addOutput)
         showBusy(false)
     }
 
@@ -200,9 +222,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.EAST
         }
-        layout.setConstraints(closeButton, closeButtonConstraints)
-        closeButton.isEnabled = false
-        add(closeButton)
+        layout.setConstraints(closeBridgeButton, closeButtonConstraints)
+        closeBridgeButton.isEnabled = false
+        add(closeBridgeButton)
 
         val statusViewConstraints = GridBagConstraints().apply {
             gridx = 5

@@ -15,19 +15,13 @@ object Commands {
     private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
 
     val resetDeviceBridge = automatorRunner
-            .plus(createAutomatorCommand("reset"))
+            .plus(createAutomatorCommand("resetDeviceBridge"))
             .plus(androidJunitRunner)
 
     val connectToWifi = automatorRunner
             .plus(createAutomatorCommand("connectToWifi"))
-            .plus(Argument.NETWORK_PASSWORD.getArguments(properties))
-            .plus(Argument.NETWORK_SSID.getArguments(properties))
-            .plus(androidJunitRunner)
-
-    val addGoogleAccount = automatorRunner
-            .plus(createAutomatorCommand("addGoogleAccount"))
-            .plus(Argument.ACCOUNT_PASSWORD.getArguments(properties))
-            .plus(Argument.ACCOUNT_EMAIL.getArguments(properties))
+            .plus(Argument.NETWORK_PASSWORD.getArgument(properties))
+            .plus(Argument.NETWORK_SSID.getArgument(properties))
             .plus(androidJunitRunner)
 
     val pushChecker = arrayOf("adb", "push", File(properties.getProperty(CHECKER_PATH_KEY)).absolutePath,
@@ -47,6 +41,19 @@ object Commands {
 
     val bridgeVersion = arrayOf("adb", "version")
     val verifyBridge = arrayOf("adb", "devices", "-l")
+
+
+    /**
+     * Get Google account command
+     *
+     * @param email Email address
+     * @param password Password
+     */
+    fun getGoogleAccountCommand(email: String, password: String) = automatorRunner
+            .plus(createAutomatorCommand("addGoogleAccount"))
+            .plus(Argument.ACCOUNT_PASSWORD.getArgument(password))
+            .plus(Argument.ACCOUNT_EMAIL.getArgument(email))
+            .plus(androidJunitRunner)
 
     /**
      * Create command
