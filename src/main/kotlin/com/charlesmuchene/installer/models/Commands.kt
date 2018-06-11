@@ -14,6 +14,14 @@ object Commands {
     private const val androidJunitRunner = "com.charlesmuchene.installer.test/com.charlesmuchene.installer.InstallerRunner"
     private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
 
+    val launchApp = automatorRunner
+            .plus(createAutomatorCommand("launchApp"))
+            .plus(androidJunitRunner)
+
+    val optimizeBattery = automatorRunner
+            .plus(createAutomatorCommand("optimizeBattery"))
+            .plus(androidJunitRunner)
+
     val resetDeviceBridge = automatorRunner
             .plus(createAutomatorCommand("resetDeviceBridge"))
             .plus(androidJunitRunner)
@@ -38,10 +46,6 @@ object Commands {
             "/data/local/tmp/com.safeboda.driver")
     val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")
-
-    val launchApp = arrayOf("adb", "shell", "am", "start", "-n",
-            "\"com.safeboda.driver/com.safeboda.driver.ui.start.StartActivity\"", "-a",
-            "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER")
 
     val bridgeVersion = arrayOf("adb", "version")
     val verifyBridge = arrayOf("adb", "devices", "-l")

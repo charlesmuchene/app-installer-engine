@@ -19,13 +19,13 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private val statusLabel: JLabel by lazy {
         JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
     }
-    private val closeBridgeButton = JButton("Finish")
-    private val emailTextField = JTextField("Email")
     private val launchButton = JButton("Launch SB")
+    private val emailTextField = JTextField("Email")
+    private val closeBridgeButton = JButton("Finish")
     private val wifiButton = JButton("Connect Wi-Fi")
-    private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
     private val passwordTextField = JTextField("Password")
+    private val optimizeButton = JButton("Optimize Battery")
     private val installButton = JButton("Install Artifacts")
 
     private val outputArea: JTextArea by lazy {
@@ -79,8 +79,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     private fun setUpListeners() {
         closeBridgeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
+        optimizeButton.addActionListener { performUserAction(UserAction.OptimizeBattery) }
         wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
-        launchButton.addActionListener { launchAppAction() }
+        launchButton.addActionListener { performUserAction(UserAction.LaunchApp) }
 
         accountButton.addActionListener {
             validateInput().let { performUserAction(UserAction.AddGoogleAccount, *it) }
@@ -91,9 +92,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             performSystemAction(SystemAction.InitializeAutomator)
             performSystemAction(SystemAction.InstallApplication)
         }
-
-        // TODO Add implementation
-        allButton.addActionListener {}
 
     }
 
@@ -141,16 +139,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     }
 
     /**
-     * Perform app launch action
-     */
-    private fun launchAppAction() {
-        addOutput("Not yet implemented. Tulia.")
-        // Start main activity
-        // Optimize battery
-        // Change environment
-    }
-
-    /**
      * Layout ui
      */
     private fun layoutUI() {
@@ -193,9 +181,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.EAST
         }
-        layout.setConstraints(allButton, allButtonConstraints)
-        allButton.isEnabled = false
-        add(allButton)
+        layout.setConstraints(optimizeButton, allButtonConstraints)
+        optimizeButton.isEnabled = false
+        add(optimizeButton)
 
         val wifiButtonConstraints = GridBagConstraints().apply {
             gridx = 3
