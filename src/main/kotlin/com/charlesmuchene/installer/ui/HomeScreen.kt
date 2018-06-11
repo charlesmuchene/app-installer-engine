@@ -19,7 +19,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private val statusLabel: JLabel by lazy {
         JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
     }
-    private val launchButton = JButton("Launch SB")
+    private val launchButton = JButton("Launch App")
     private val emailTextField = JTextField("Email")
     private val closeBridgeButton = JButton("Finish")
     private val wifiButton = JButton("Connect Wi-Fi")
@@ -59,7 +59,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         launchButton.isEnabled = enable
         accountButton.isEnabled = enable
         installButton.isEnabled = enable
+        optimizeButton.isEnabled = enable
         closeBridgeButton.isEnabled = enable
+
         showBusy(!enable)
     }
 
@@ -182,7 +184,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             anchor = GridBagConstraints.EAST
         }
         layout.setConstraints(optimizeButton, allButtonConstraints)
-        optimizeButton.isEnabled = false
         add(optimizeButton)
 
         val wifiButtonConstraints = GridBagConstraints().apply {

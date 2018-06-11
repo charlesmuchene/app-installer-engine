@@ -48,7 +48,7 @@ object Commands {
             "\"/data/local/tmp/com.safeboda.driver\"")
 
     val bridgeVersion = arrayOf("adb", "version")
-    val verifyBridge = arrayOf("adb", "devices", "-l")
+    val verifyBridge = arrayOf("adb", "devices")
 
 
     /**
