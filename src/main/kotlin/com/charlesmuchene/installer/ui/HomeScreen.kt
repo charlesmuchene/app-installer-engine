@@ -16,14 +16,16 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
 
     private var output = StringBuilder()
 
-    private val statusView: JLabel by lazy {
+    private val statusLabel: JLabel by lazy {
         JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
     }
     private val closeButton = JButton("Close")
+    private val emailTextField = JTextField("Email")
     private val launchButton = JButton("Launch SB")
     private val wifiButton = JButton("Connect Wi-Fi")
     private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
+    private val passwordTextField = JTextField("Password")
     private val installButton = JButton("Install Artifacts")
 
     private val outputArea: JTextArea by lazy {
@@ -207,14 +209,41 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             gridy = 15
             weightx = 1.0
             weighty = 0.0
-            gridwidth = 32
+            gridwidth = 3
             gridheight = 2
             insets = Insets(4, 4, 4, 4)
-            fill = GridBagConstraints.HORIZONTAL
+            fill = GridBagConstraints.NONE
+            anchor = GridBagConstraints.WEST
+        }
+        layout.setConstraints(statusLabel, statusViewConstraints)
+        add(statusLabel)
+
+        val emailFieldConstraints = GridBagConstraints().apply {
+            gridx = 9
+            gridy = 15
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.CENTER
+        }
+        layout.setConstraints(emailTextField, emailFieldConstraints)
+        add(emailTextField)
+
+        val passwordFieldConstraints = GridBagConstraints().apply {
+            gridx = 15
+            gridy = 15
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.EAST
         }
-        layout.setConstraints(statusView, statusViewConstraints)
-        add(statusView)
+        layout.setConstraints(passwordTextField, passwordFieldConstraints)
+
+        add(passwordTextField)
 
         val outputAreaConstraints = GridBagConstraints().apply {
             gridx = 3
@@ -246,6 +275,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Display status
      */
     private fun showBusy(busy: Boolean) {
-        statusView.text = if (busy) "Working..." else "Done"
+        statusLabel.text = if (busy) "Working..." else "Done"
     }
 }
