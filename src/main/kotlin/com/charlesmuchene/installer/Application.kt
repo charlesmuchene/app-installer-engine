@@ -2,8 +2,6 @@ package com.charlesmuchene.installer
 
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.ui.HomeScreen
-import com.charlesmuchene.installer.utils.loadConfiguration
-import java.util.*
 import javax.swing.UIManager
 
 /**
@@ -11,28 +9,26 @@ import javax.swing.UIManager
  */
 object Application {
 
+    private val homeScreen: HomeScreen by lazy { HomeScreen(runner) }
+    private val runner: Runner by lazy { Runner() }
+
     @JvmStatic
     fun main(args: Array<String>) {
-        val runner = Runner()
-        val output: String? = runInitializationSequence(runner)
-        showUI(runner, output)
+        showUI()
+        runInitializationSequence(runner)?.let(homeScreen::addOutput)
+        homeScreen.enableUI(true)
     }
 
     /**
      * Show UI
-     *
-     * @param runner [Runner] instance
-     * @param output System actions output
      */
-    private fun showUI(runner: Runner, output: String? = null) {
+    private fun showUI() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        val homeScreen = HomeScreen(runner)
-        output?.let(homeScreen::addOutput)
+        homeScreen.showScreen()
     }
 
     /**
