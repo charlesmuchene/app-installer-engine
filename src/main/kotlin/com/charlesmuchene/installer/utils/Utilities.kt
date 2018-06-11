@@ -16,6 +16,8 @@ import java.util.*
  */
 const val propertiesFile = "installer.properties"
 
+val lineSeparator = System.lineSeparator()
+
 /**
  * Load app configuration
  */

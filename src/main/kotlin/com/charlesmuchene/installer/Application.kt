@@ -15,7 +15,7 @@ object Application {
     @JvmStatic
     fun main(args: Array<String>) {
         showUI()
-        runInitializationSequence(runner)?.let(homeScreen::addOutput)
+        runInitializationSequence()
         homeScreen.enableUI(true)
     }
 
@@ -33,18 +33,13 @@ object Application {
 
     /**
      * Run initialization sequence
-     *
-     * @param runner [Runner] instance
-     * @return Output
      */
-    private fun runInitializationSequence(runner: Runner): String? {
-        var output: String? = null
-        runner.run {
-            output = runSystemAction(SystemAction.InitializeInstaller)
-            output += runSystemAction(SystemAction.InitializeAutomator)
-            output += runSystemAction(SystemAction.InstallApplication)
+    private fun runInitializationSequence() {
+        with(runner) {
+            runSystemAction(SystemAction.InitializeInstaller)?.let(homeScreen::addOutput)
+            runSystemAction(SystemAction.InitializeAutomator)?.let(homeScreen::addOutput)
+//            runSystemAction(SystemAction.InstallApplication)?.let(homeScreen::addOutput)
         }
-        return output
     }
 
 }

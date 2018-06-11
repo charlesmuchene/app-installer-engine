@@ -3,6 +3,7 @@ package com.charlesmuchene.installer.ui
 import com.charlesmuchene.installer.Runner
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
+import com.charlesmuchene.installer.utils.lineSeparator
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -17,12 +18,25 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
 
     private var output = StringBuilder()
 
-    private val outputArea = JTextArea()
     private val closeButton = JButton("Close")
     private val wifiButton = JButton("Connect Wi-Fi")
     private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
     private val installButton = JButton("Install SB App")
+
+    private val outputArea: JTextArea by lazy {
+        JTextArea().apply {
+            margin = Insets(4, 4, 4, 4)
+            isEditable = false
+        }
+    }
+
+    private val outputAreaScrollPane: JScrollPane by lazy {
+        JScrollPane(outputArea).apply {
+            verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+            horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+        }
+    }
 
     init {
         defaultCloseOperation = EXIT_ON_CLOSE
@@ -70,6 +84,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param action [UserAction] to perform
      */
     private fun performUserAction(action: UserAction) {
+        addOutput("Installer Running: $action")
         runner.runUserAction(action)?.let(::addOutput)
     }
 
@@ -79,6 +94,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param action [SystemAction] to perform
      */
     private fun performSystemAction(action: SystemAction) {
+        addOutput("Installer Running: $action")
         runner.runSystemAction(action)?.let(::addOutput)
     }
 
@@ -166,11 +182,8 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.CENTER
         }
-        val scrollPane = JScrollPane(outputArea)
-        layout.setConstraints(scrollPane, outputAreaConstraints)
-        outputArea.margin = Insets(4, 4, 4, 4)
-        outputArea.isEditable = false
-        add(scrollPane)
+        layout.setConstraints(outputAreaScrollPane, outputAreaConstraints)
+        add(outputAreaScrollPane)
     }
 
     /**
@@ -179,7 +192,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param content Content to show
      */
     fun addOutput(content: String) {
-        output.append(content).append("\n")
+        output.append(content).append(lineSeparator)
         outputArea.text = output.toString()
     }
 }

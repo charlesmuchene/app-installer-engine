@@ -2,6 +2,7 @@ package com.charlesmuchene.installer
 
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
+import com.charlesmuchene.installer.utils.lineSeparator
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -28,7 +29,7 @@ class Runner {
         val (actionOne, actionTwo) = action.getCommands()
         val resultOne = runProcess(actionOne)
         val resultTwo = runProcess(actionTwo)
-        return resultOne + resultTwo
+        return "$resultOne$lineSeparator$resultTwo"
     }
 
     /**
@@ -43,7 +44,7 @@ class Runner {
         try {
             val process = builder.start()
             val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val reduce = reader.lines().reduce { t: String?, u: String? -> "$t\n$u" }
+            val reduce = reader.lines().reduce { a: String?, b: String? -> "$a$lineSeparator$b" }
             output = if (reduce.isPresent) reduce.get() else "SB Installer: Unknown error"
             process.waitFor()
             process.destroy()

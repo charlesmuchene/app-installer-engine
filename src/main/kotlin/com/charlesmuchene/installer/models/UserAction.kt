@@ -18,4 +18,9 @@ enum class UserAction {
         ResetDeviceBridge -> Commands.resetDeviceBridge
     }
 
+    /**
+     * To string
+     */
+    override fun toString(): String = getCommand().reduce { a, b -> "$a $b" }
+
 }
