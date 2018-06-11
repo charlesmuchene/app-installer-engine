@@ -4,25 +4,27 @@ import com.charlesmuchene.installer.Runner
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
 import com.charlesmuchene.installer.utils.lineSeparator
-import java.awt.Dimension
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
-import java.awt.Insets
+import java.awt.*
 import javax.swing.*
+
 
 /**
  * Home screen
  */
-class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(600, 400))
+class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(800, 600))
     : JFrame("SB Installer Engine") {
 
     private var output = StringBuilder()
 
+    private val statusView: JLabel by lazy {
+        JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
+    }
     private val closeButton = JButton("Close")
+    private val launchButton = JButton("Launch SB")
     private val wifiButton = JButton("Connect Wi-Fi")
     private val allButton = JButton("All in Sequence")
     private val accountButton = JButton("Add Account")
-    private val installButton = JButton("Install SB App")
+    private val installButton = JButton("Install Artifacts")
 
     private val outputArea: JTextArea by lazy {
         JTextArea().apply {
@@ -55,6 +57,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         closeButton.isEnabled = enable
         accountButton.isEnabled = enable
         installButton.isEnabled = enable
+        showBusy(!enable)
     }
 
     /**
@@ -64,6 +67,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         size = screenSize
         minimumSize = screenSize
         setLocationRelativeTo(null)
+        showBusy(true)
         isVisible = true
     }
 
@@ -71,10 +75,19 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Set up listeners
      */
     private fun setUpListeners() {
-        wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
-        closeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
         accountButton.addActionListener { performUserAction(UserAction.AddGoogleAccount) }
-        installButton.addActionListener { performSystemAction(SystemAction.InstallApplication) }
+        closeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
+        wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
+
+        installButton.addActionListener {
+            performSystemAction(SystemAction.InitializeInstaller)
+            performSystemAction(SystemAction.InitializeAutomator)
+            performSystemAction(SystemAction.InstallApplication)
+        }
+
+        // TODO Add implementation
+        allButton.addActionListener {}
+        launchButton.addActionListener { }
     }
 
     /**
@@ -83,8 +96,10 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param action [UserAction] to perform
      */
     private fun performUserAction(action: UserAction) {
+        showBusy(true)
         addOutput("Installer Running: $action")
         runner.runUserAction(action)?.let(::addOutput)
+        showBusy(false)
     }
 
     /**
@@ -93,8 +108,10 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param action [SystemAction] to perform
      */
     private fun performSystemAction(action: SystemAction) {
+        showBusy(true)
         addOutput("Installer Running: $action")
         runner.runSystemAction(action)?.let(::addOutput)
+        showBusy(false)
     }
 
     /**
@@ -102,36 +119,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     private fun layoutUI() {
         val layout = GridBagLayout()
-        val constraints = GridBagConstraints()
-        contentPane.layout = layout
-        val wifiButtonConstraints = constraints.apply {
+
+        val installButtonConstraints = GridBagConstraints().apply {
             gridx = 3
-            gridy = 3
-            weightx = 1.0
-            weighty = 0.0
-            gridwidth = 5
-            gridheight = 2
-            fill = GridBagConstraints.BOTH
-            anchor = GridBagConstraints.WEST
-        }
-        layout.setConstraints(wifiButton, wifiButtonConstraints)
-        add(wifiButton)
-
-        val accountButtonConstraints = constraints.apply {
-            gridx = 9
-            gridy = 3
-            weightx = 1.0
-            weighty = 0.0
-            gridwidth = 5
-            gridheight = 2
-            fill = GridBagConstraints.BOTH
-            anchor = GridBagConstraints.CENTER
-        }
-        layout.setConstraints(accountButton, accountButtonConstraints)
-        add(accountButton)
-
-        val installButtonConstraints = constraints.apply {
-            gridx = 15
             gridy = 3
             weightx = 1.0
             weighty = 0.0
@@ -143,8 +133,23 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         layout.setConstraints(installButton, installButtonConstraints)
         add(installButton)
 
-        val allButtonConstraints = constraints.apply {
-            gridx = 21
+        val launchButtonConstraints = GridBagConstraints().apply {
+            gridx = 9
+            gridy = 3
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.CENTER
+        }
+
+        layout.setConstraints(launchButton, launchButtonConstraints)
+        launchButton.isEnabled = false
+        add(launchButton)
+
+        val allButtonConstraints = GridBagConstraints().apply {
+            gridx = 15
             gridy = 3
             weightx = 1.0
             weighty = 0.0
@@ -157,9 +162,35 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         allButton.isEnabled = false
         add(allButton)
 
-        val closeButtonConstraints = constraints.apply {
-            gridx = 26
-            gridy = 3
+        val wifiButtonConstraints = GridBagConstraints().apply {
+            gridx = 3
+            gridy = 7
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.WEST
+        }
+        layout.setConstraints(wifiButton, wifiButtonConstraints)
+        add(wifiButton)
+
+        val accountButtonConstraints = GridBagConstraints().apply {
+            gridx = 9
+            gridy = 7
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.CENTER
+        }
+        layout.setConstraints(accountButton, accountButtonConstraints)
+        add(accountButton)
+
+        val closeButtonConstraints = GridBagConstraints().apply {
+            gridx = 15
+            gridy = 7
             weightx = 1.0
             weighty = 0.0
             gridwidth = 5
@@ -171,18 +202,34 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         closeButton.isEnabled = false
         add(closeButton)
 
-        val outputAreaConstraints = constraints.apply {
-            gridx = 3
+        val statusViewConstraints = GridBagConstraints().apply {
+            gridx = 5
             gridy = 15
             weightx = 1.0
+            weighty = 0.0
+            gridwidth = 32
+            gridheight = 2
+            insets = Insets(4, 4, 4, 4)
+            fill = GridBagConstraints.HORIZONTAL
+            anchor = GridBagConstraints.EAST
+        }
+        layout.setConstraints(statusView, statusViewConstraints)
+        add(statusView)
+
+        val outputAreaConstraints = GridBagConstraints().apply {
+            gridx = 3
+            gridy = 21
+            weightx = 1.0
             weighty = 1.0
-            gridwidth = 30
+            gridwidth = 32
             gridheight = 11
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.CENTER
         }
         layout.setConstraints(outputAreaScrollPane, outputAreaConstraints)
         add(outputAreaScrollPane)
+
+        contentPane.layout = layout
     }
 
     /**
@@ -193,5 +240,12 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     fun addOutput(content: String) {
         output.append(content).append(lineSeparator)
         outputArea.text = output.toString()
+    }
+
+    /**
+     * Display status
+     */
+    private fun showBusy(busy: Boolean) {
+        statusView.text = if (busy) "Working..." else "Done"
     }
 }
