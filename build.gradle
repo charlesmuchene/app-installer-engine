@@ -20,6 +20,8 @@ version = '0.1'
 
 mainClassName = "com.charlesmuchene.installer.Application"
 
+kotlin { experimental { coroutines 'enable' } }
+
 repositories {
     mavenCentral()
 }
