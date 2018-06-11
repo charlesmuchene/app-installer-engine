@@ -23,6 +23,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private val statusLabel: JLabel by lazy {
         JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
     }
+    private val nextButton = JButton("Next")
+    private val clearButton = JButton("Clear")
+    private val previousButton = JButton("Previous")
     private val launchButton = JButton("Launch App")
     private val emailTextField = JTextField("Email")
     private val closeBridgeButton = JButton("Finish")
@@ -237,23 +240,22 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         layout.setConstraints(closeBridgeButton, closeButtonConstraints)
         add(closeBridgeButton)
 
-        val statusViewConstraints = GridBagConstraints().apply {
-            gridx = 5
+        val clearButtonConstraints = GridBagConstraints().apply {
+            gridx = 3
             gridy = 15
             weightx = 1.0
             weighty = 0.0
-            gridwidth = 3
+            gridwidth = 5
             gridheight = 2
-            insets = Insets(4, 4, 4, 4)
-            fill = GridBagConstraints.NONE
+            fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.WEST
         }
-        layout.setConstraints(statusLabel, statusViewConstraints)
-        add(statusLabel)
+        layout.setConstraints(clearButton, clearButtonConstraints)
+        add(clearButton)
 
         val emailFieldConstraints = GridBagConstraints().apply {
             gridx = 9
-            gridy = 15
+            gridy = 21
             weightx = 1.0
             weighty = 0.0
             gridwidth = 5
@@ -266,7 +268,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
 
         val passwordFieldConstraints = GridBagConstraints().apply {
             gridx = 15
-            gridy = 15
+            gridy = 21
             weightx = 1.0
             weighty = 0.0
             gridwidth = 5
@@ -275,12 +277,51 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             anchor = GridBagConstraints.EAST
         }
         layout.setConstraints(passwordTextField, passwordFieldConstraints)
-
         add(passwordTextField)
+
+        val statusViewConstraints = GridBagConstraints().apply {
+            gridx = 5
+            gridy = 21
+            weightx = 1.0
+            weighty = 0.0
+            gridwidth = 3
+            gridheight = 2
+            insets = Insets(4, 4, 4, 4)
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.WEST
+        }
+        layout.setConstraints(statusLabel, statusViewConstraints)
+        add(statusLabel)
+
+        val previousButtonConstraints = GridBagConstraints().apply {
+            gridx = 9
+            gridy = 15
+            weightx = 0.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.WEST
+        }
+        layout.setConstraints(previousButton, previousButtonConstraints)
+        add(previousButton)
+
+        val nextButtonConstraints = GridBagConstraints().apply {
+            gridx = 15
+            gridy = 15
+            weightx = 0.0
+            weighty = 0.0
+            gridwidth = 5
+            gridheight = 2
+            fill = GridBagConstraints.BOTH
+            anchor = GridBagConstraints.WEST
+        }
+        layout.setConstraints(nextButton, nextButtonConstraints)
+        add(nextButton)
 
         val outputAreaConstraints = GridBagConstraints().apply {
             gridx = 3
-            gridy = 21
+            gridy = 25
             weightx = 1.0
             weighty = 1.0
             gridwidth = 32
