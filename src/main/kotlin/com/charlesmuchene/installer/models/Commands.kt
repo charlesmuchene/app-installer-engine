@@ -39,6 +39,10 @@ object Commands {
     val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")
 
+    val launchApp = arrayOf("adb", "shell", "am", "start", "-n",
+            "\"com.safeboda.driver/com.safeboda.driver.ui.start.StartActivity\"", "-a",
+            "android.intent.action.MAIN", "-c", "android.intent.category.LAUNCHER")
+
     val bridgeVersion = arrayOf("adb", "version")
     val verifyBridge = arrayOf("adb", "devices", "-l")
 

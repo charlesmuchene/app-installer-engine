@@ -56,9 +56,10 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     fun enableUI(enable: Boolean) {
         wifiButton.isEnabled = enable
-        closeBridgeButton.isEnabled = enable
+        launchButton.isEnabled = enable
         accountButton.isEnabled = enable
         installButton.isEnabled = enable
+        closeBridgeButton.isEnabled = enable
         showBusy(!enable)
     }
 
@@ -79,6 +80,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private fun setUpListeners() {
         closeBridgeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
         wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
+        launchButton.addActionListener { launchAppAction() }
 
         accountButton.addActionListener {
             validateInput().let { performUserAction(UserAction.AddGoogleAccount, *it) }
@@ -92,7 +94,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
 
         // TODO Add implementation
         allButton.addActionListener {}
-        launchButton.addActionListener { }
+
     }
 
     /**
@@ -139,6 +141,16 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     }
 
     /**
+     * Perform app launch action
+     */
+    private fun launchAppAction() {
+        addOutput("Not yet implemented. Tulia.")
+        // Start main activity
+        // Optimize battery
+        // Change environment
+    }
+
+    /**
      * Layout ui
      */
     private fun layoutUI() {
@@ -169,7 +181,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         }
 
         layout.setConstraints(launchButton, launchButtonConstraints)
-        launchButton.isEnabled = false
         add(launchButton)
 
         val allButtonConstraints = GridBagConstraints().apply {
@@ -223,7 +234,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             anchor = GridBagConstraints.EAST
         }
         layout.setConstraints(closeBridgeButton, closeButtonConstraints)
-        closeBridgeButton.isEnabled = false
         add(closeBridgeButton)
 
         val statusViewConstraints = GridBagConstraints().apply {
