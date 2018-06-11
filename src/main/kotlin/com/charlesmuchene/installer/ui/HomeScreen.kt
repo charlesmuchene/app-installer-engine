@@ -62,11 +62,14 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param enable Boolean
      */
     fun enableUI(enable: Boolean) {
+        nextButton.isEnabled = enable
         wifiButton.isEnabled = enable
+        clearButton.isEnabled = enable
         launchButton.isEnabled = enable
         accountButton.isEnabled = enable
         installButton.isEnabled = enable
         optimizeButton.isEnabled = enable
+        previousButton.isEnabled = enable
         closeBridgeButton.isEnabled = enable
 
         showBusy(!enable)
@@ -99,6 +102,10 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         optimizeButton.addActionListener { performUserAction(UserAction.OptimizeBattery) }
         wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
         launchButton.addActionListener { performUserAction(UserAction.LaunchApp) }
+        clearButton.addActionListener {
+            resetOutput()
+            performSystemAction(SystemAction.InitializeBridge)
+        }
 
         accountButton.addActionListener {
             validateInput().let { performUserAction(UserAction.AddGoogleAccount, *it) }
@@ -109,6 +116,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             performSystemAction(SystemAction.InitializeAutomator)
             performSystemAction(SystemAction.InstallApplication)
         }
+
+        nextButton.addActionListener { }
+        previousButton.addActionListener {}
 
     }
 
@@ -343,6 +353,17 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private fun addOutput(content: String) {
         output.append(content).append(lineSeparator)
         outputArea.text = output.toString()
+    }
+
+    /**
+     * Reset output
+     */
+    private fun resetOutput() {
+        output = StringBuilder()
+        showBusy(false)
+        outputArea.text = ""
+        emailTextField.text = "Email"
+        passwordTextField.text = "Password"
     }
 
     /**
