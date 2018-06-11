@@ -28,13 +28,26 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         defaultCloseOperation = EXIT_ON_CLOSE
         layoutUI()
         setUpListeners()
-        showFrame()
+        enableUI(false)
     }
 
     /**
-     * Show frame
+     * Enable/Disable UI
+     *
+     * @param enable Boolean
      */
-    private fun showFrame() {
+    fun enableUI(enable: Boolean) {
+        allButton.isEnabled = enable
+        wifiButton.isEnabled = enable
+        closeButton.isEnabled = enable
+        accountButton.isEnabled = enable
+        installButton.isEnabled = enable
+    }
+
+    /**
+     * Show screen
+     */
+    fun showScreen() {
         size = screenSize
         minimumSize = screenSize
         setLocationRelativeTo(null)
@@ -153,9 +166,11 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             fill = GridBagConstraints.BOTH
             anchor = GridBagConstraints.CENTER
         }
-        layout.setConstraints(outputArea, outputAreaConstraints)
+        val scrollPane = JScrollPane(outputArea)
+        layout.setConstraints(scrollPane, outputAreaConstraints)
         outputArea.margin = Insets(4, 4, 4, 4)
-        add(outputArea)
+        outputArea.isEditable = false
+        add(scrollPane)
     }
 
     /**
