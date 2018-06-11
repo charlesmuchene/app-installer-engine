@@ -1,6 +1,7 @@
 buildscript {
     ext {
         kotlin_version = '1.2.41'
+        coroutines_version = '0.23.0'
     }
 
     repositories {
@@ -20,13 +21,12 @@ version = '0.1'
 
 mainClassName = "com.charlesmuchene.installer.Application"
 
-kotlin { experimental { coroutines 'enable' } }
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.0'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-javafx:$coroutines_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

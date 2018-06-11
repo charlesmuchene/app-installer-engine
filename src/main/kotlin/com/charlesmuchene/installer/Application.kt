@@ -38,7 +38,7 @@ object Application {
      * Run initialization sequence
      */
     private fun runInitializationSequence() {
-        runner.runSystemAction(SystemAction.InitializeBridge)?.let(homeScreen::addOutput)
+        runner.runSystemAction(SystemAction.InitializeBridge)
     }
 
 }

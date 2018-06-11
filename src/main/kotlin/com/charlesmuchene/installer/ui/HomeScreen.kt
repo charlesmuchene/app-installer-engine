@@ -4,8 +4,12 @@ import com.charlesmuchene.installer.Runner
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
 import com.charlesmuchene.installer.utils.lineSeparator
+import kotlinx.coroutines.experimental.channels.consumeEach
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import java.awt.*
 import javax.swing.*
+import kotlinx.coroutines.experimental.javafx.JavaFx as UI
 
 
 /**
@@ -80,6 +84,14 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Set up listeners
      */
     private fun setUpListeners() {
+        launch {
+            runner.channel.consumeEach { result ->
+                withContext(UI) {
+                    result?.let(::addOutput)
+                }
+            }
+        }
+
         closeBridgeButton.addActionListener { performUserAction(UserAction.ResetDeviceBridge) }
         optimizeButton.addActionListener { performUserAction(UserAction.OptimizeBattery) }
         wifiButton.addActionListener { performUserAction(UserAction.ConnectWifi) }
@@ -124,7 +136,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private fun performUserAction(action: UserAction, vararg values: String) {
         showBusy(true)
         addOutput("Installer Running: $action")
-        runner.runUserAction(action, *values)?.let(::addOutput)
+        runner.runUserAction(action, *values)
         showBusy(false)
     }
 
@@ -136,7 +148,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private fun performSystemAction(action: SystemAction) {
         showBusy(true)
         addOutput("Installer Running: $action")
-        runner.runSystemAction(action)?.let(::addOutput)
+        runner.runSystemAction(action)
         showBusy(false)
     }
 
@@ -287,7 +299,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      *
      * @param content Content to show
      */
-    fun addOutput(content: String) {
+    private fun addOutput(content: String) {
         output.append(content).append(lineSeparator)
         outputArea.text = output.toString()
     }

@@ -7,10 +7,6 @@ import java.io.FileNotFoundException
 import java.util.*
 
 /**
- * Utilities file
- */
-
-/**
  * Properties file name
  */
 const val propertiesFile = "installer.properties"
