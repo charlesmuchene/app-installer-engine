@@ -24,6 +24,6 @@ enum class UserAction {
     /**
      * To string
      */
-    override fun toString(): String = getCommand("", "").reduce { a, b -> "$a $b" }
+    override fun toString(): String = getCommand("email", "password").reduce { a, b -> "$a $b" }
 
 }

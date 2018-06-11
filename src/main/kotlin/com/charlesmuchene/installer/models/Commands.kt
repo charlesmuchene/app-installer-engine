@@ -2,14 +2,11 @@ package com.charlesmuchene.installer.models
 
 import com.charlesmuchene.installer.utils.*
 import java.io.File
-import java.util.*
 
 /**
  * Installer/Automator commands
  */
 object Commands {
-
-    private val properties: Properties = loadConfiguration()
 
     private const val androidJunitRunner = "com.charlesmuchene.installer.test/com.charlesmuchene.installer.InstallerRunner"
     private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
@@ -42,7 +39,7 @@ object Commands {
     val installAutomator = arrayOf("adb", "shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer.test\"")
 
-    val pushSBDriverApp = arrayOf("adb", "push", File(properties.getProperty(SB_DRIVER_PATH_KEY)).absolutePath,
+    val pushSBDriverApp = arrayOf("adb", "push", File(properties.getProperty(SB_APP_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.safeboda.driver")
     val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")

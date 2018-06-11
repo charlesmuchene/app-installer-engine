@@ -3,6 +3,7 @@ package com.charlesmuchene.installer.ui
 import com.charlesmuchene.installer.Runner
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
+import com.charlesmuchene.installer.utils.driversList
 import com.charlesmuchene.installer.utils.lineSeparator
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.launch
@@ -15,14 +16,12 @@ import kotlinx.coroutines.experimental.javafx.JavaFx as UI
 /**
  * Home screen
  */
-class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(800, 600))
+class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(1080, 760))
     : JFrame("SB Installer Engine") {
 
     private var output = StringBuilder()
+    private var driverListMarker = -1
 
-    private val statusLabel: JLabel by lazy {
-        JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
-    }
     private val nextButton = JButton("Next")
     private val clearButton = JButton("Clear")
     private val previousButton = JButton("Previous")
@@ -34,6 +33,10 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     private val passwordTextField = JTextField("Password")
     private val optimizeButton = JButton("Optimize Battery")
     private val installButton = JButton("Install Artifacts")
+
+    private val statusLabel: JLabel by lazy {
+        JLabel().apply { font = Font("Courier", Font.BOLD, 14) }
+    }
 
     private val outputArea: JTextArea by lazy {
         JTextArea().apply {
@@ -84,6 +87,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
         setLocationRelativeTo(null)
         showBusy(true)
         isVisible = true
+        launch {
+            loadNextAccount()
+        }
     }
 
     /**
@@ -117,8 +123,9 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
             performSystemAction(SystemAction.InstallApplication)
         }
 
-        nextButton.addActionListener { }
-        previousButton.addActionListener {}
+        nextButton.addActionListener { loadNextAccount() }
+
+        previousButton.addActionListener { loadPreviousAccount() }
 
     }
 
@@ -142,12 +149,40 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
     }
 
     /**
+     * Load next account
+     */
+    private fun loadNextAccount() {
+        if (++driverListMarker > driversList.size - 1) driverListMarker = driversList.size - 1
+        setAccount(driverListMarker)
+    }
+
+    /**
+     * Load previous account
+     */
+    private fun loadPreviousAccount() {
+        if (--driverListMarker < 0) driverListMarker = 0
+        setAccount(driverListMarker)
+    }
+
+    /**
+     * Set account from index
+     *
+     * @param index Index of the account
+     */
+    private fun setAccount(index: Int) {
+        val (email, password) = driversList[index]
+        emailTextField.text = email
+        passwordTextField.text = password
+    }
+
+    /**
      * Perform user action
      *
      * @param action [UserAction] to perform
      */
     private fun performUserAction(action: UserAction, vararg values: String) {
         showBusy(true)
+        if (values.isNotEmpty()) addOutput(values.reduce{a, b -> "$a -> $b"})
         addOutput("Installer Running: $action")
         runner.runUserAction(action, *values)
         showBusy(false)
@@ -359,6 +394,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Reset output
      */
     private fun resetOutput() {
+        driverListMarker = -1
         output = StringBuilder()
         showBusy(false)
         outputArea.text = ""
