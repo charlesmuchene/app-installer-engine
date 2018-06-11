@@ -35,11 +35,7 @@ object Application {
      * Run initialization sequence
      */
     private fun runInitializationSequence() {
-        with(runner) {
-            runSystemAction(SystemAction.InitializeInstaller)?.let(homeScreen::addOutput)
-            runSystemAction(SystemAction.InitializeAutomator)?.let(homeScreen::addOutput)
-//            runSystemAction(SystemAction.InstallApplication)?.let(homeScreen::addOutput)
-        }
+        runner.runSystemAction(SystemAction.InitializeBridge)?.let(homeScreen::addOutput)
     }
 
 }

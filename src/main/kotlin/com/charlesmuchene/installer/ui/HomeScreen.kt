@@ -51,7 +51,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param enable Boolean
      */
     fun enableUI(enable: Boolean) {
-        allButton.isEnabled = enable
         wifiButton.isEnabled = enable
         closeButton.isEnabled = enable
         accountButton.isEnabled = enable

@@ -7,7 +7,7 @@ import com.charlesmuchene.installer.utils.lineSeparator
  */
 enum class SystemAction {
 
-    InitializeInstaller, InitializeAutomator, InstallApplication;
+    InitializeBridge, InitializeInstaller, InitializeAutomator, InstallApplication;
 
     /**
      * Get system action commands
@@ -15,6 +15,7 @@ enum class SystemAction {
      * @return Action commands
      */
     fun getCommands(): Pair<Array<String>, Array<String>> = when (this) {
+        InitializeBridge -> Pair(Commands.bridgeVersion, Commands.verifyBridge)
         InitializeInstaller -> Pair(Commands.pushChecker, Commands.installChecker)
         InitializeAutomator -> Pair(Commands.pushAutomator, Commands.installAutomator)
         InstallApplication -> Pair(Commands.pushSBDriverApp, Commands.installSBDriverApp)

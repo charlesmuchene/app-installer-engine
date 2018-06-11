@@ -45,6 +45,9 @@ object Commands {
     val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")
 
+    val bridgeVersion = arrayOf("adb", "version")
+    val verifyBridge = arrayOf("adb", "devices", "-l")
+
     /**
      * Create command
      *
