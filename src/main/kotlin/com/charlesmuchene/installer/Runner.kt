@@ -3,8 +3,9 @@ package com.charlesmuchene.installer
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
 import com.charlesmuchene.installer.utils.lineSeparator
-import kotlinx.coroutines.experimental.*
+import com.charlesmuchene.installer.utils.reduce
 import kotlinx.coroutines.experimental.channels.Channel
+import kotlinx.coroutines.experimental.launch
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -21,7 +22,9 @@ class Runner {
      * @param action [UserAction] instance
      */
     fun runUserAction(action: UserAction, vararg values: String) {
-        runProcess(action.getCommand(*values))
+        val command = action.getCommand(*values)
+        launch { channel.send(command.reduce()) }
+        runProcess(command)
     }
 
     /**
@@ -31,7 +34,9 @@ class Runner {
      */
     fun runSystemAction(action: SystemAction) {
         val (actionOne, actionTwo) = action.getCommands()
+        launch { channel.send("Installer Running: ${actionOne.reduce()}") }
         runProcess(actionOne)
+        launch { channel.send("Installer Running: ${actionTwo.reduce()}") }
         runProcess(actionTwo)
     }
 
@@ -42,18 +47,21 @@ class Runner {
      */
     private fun runProcess(command: Array<String>) {
         launch {
-            val builder = ProcessBuilder(*command)
+            val builder = ProcessBuilder(*command).apply { redirectErrorStream() }
             val output: String?
             try {
                 val process = builder.start()
                 val reader = BufferedReader(InputStreamReader(process.inputStream))
                 val reduce = reader.lines().reduce { a: String?, b: String? -> "$a$lineSeparator$b" }
-                output = if (reduce.isPresent) reduce.get() else "SB Installer: Unknown error"
+                output = if (reduce.isPresent) reduce.get() else "Installer Engine: Error"
                 channel.send(output)
                 process.waitFor()
                 process.destroy()
             } catch (e: Exception) {
-                e.printStackTrace()
+                val message = "Installer Error: ${e.localizedMessage}"
+                channel.send(message)
+            } finally {
+                channel.send("Installer Finished: ${command.reduce()}")
             }
         }
     }

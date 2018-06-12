@@ -1,6 +1,7 @@
 package com.charlesmuchene.installer.models
 
 import com.charlesmuchene.installer.utils.lineSeparator
+import com.charlesmuchene.installer.utils.reduce
 
 /**
  * System actions
@@ -21,12 +22,6 @@ enum class SystemAction {
         InstallApplication -> Pair(Commands.pushSBDriverApp, Commands.installSBDriverApp)
     }
 
-    /**
-     * To string
-     */
-    override fun toString(): String {
-        return getCommands().first.reduce { a, b -> "$a $b" }
-                .plus(lineSeparator)
-                .plus(getCommands().second.reduce { a, b -> "$a $b" })
-    }
+    override fun toString(): String =
+            getCommands().first.reduce().plus(lineSeparator).plus(getCommands().second.reduce())
 }

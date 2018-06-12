@@ -182,8 +182,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     private fun performUserAction(action: UserAction, vararg values: String) {
         showBusy(true)
-        if (values.isNotEmpty()) addOutput(values.reduce{a, b -> "$a -> $b"})
-        addOutput("Installer Running: $action")
         runner.runUserAction(action, *values)
         showBusy(false)
     }
@@ -195,7 +193,6 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      */
     private fun performSystemAction(action: SystemAction) {
         showBusy(true)
-        addOutput("Installer Running: $action")
         runner.runSystemAction(action)
         showBusy(false)
     }

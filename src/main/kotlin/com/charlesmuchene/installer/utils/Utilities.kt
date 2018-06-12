@@ -42,3 +42,10 @@ fun parseLine(line: String, separator: Char = ','): Pair<String, String> {
     val (email, password) = line.split(separator)
     return Pair(email, password)
 }
+
+/**
+ * Array reduction extension function
+ *
+ * @return Flattened array
+ */
+fun Array<String>.reduce(): String = this.reduce { a, b -> "$a $b" }

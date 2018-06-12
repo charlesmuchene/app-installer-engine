@@ -1,5 +1,7 @@
 package com.charlesmuchene.installer.models
 
+import com.charlesmuchene.installer.utils.reduce
+
 /**
  * User actions
  */
@@ -21,9 +23,6 @@ enum class UserAction {
         AddGoogleAccount -> Commands.getGoogleAccountCommand(values[0], values[1])
     }
 
-    /**
-     * To string
-     */
-    override fun toString(): String = getCommand("email", "password").reduce { a, b -> "$a $b" }
+    override fun toString(): String = getCommand("email", "password").reduce()
 
 }
