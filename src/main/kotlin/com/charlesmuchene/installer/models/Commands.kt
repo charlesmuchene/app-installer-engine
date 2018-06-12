@@ -9,7 +9,7 @@ import java.io.File
 object Commands {
 
     private const val androidJunitRunner = "com.charlesmuchene.installer.test/com.charlesmuchene.installer.InstallerRunner"
-    private val automatorRunner = arrayOf("adb", "shell", "am", "instrument", "-w", "-r", "-e", "class")
+    private val automatorRunner = arrayOf("shell", "am", "instrument", "-w", "-r", "-e", "class")
 
     val launchApp = automatorRunner
             .plus(createAutomatorCommand("launchApp"))
@@ -29,23 +29,23 @@ object Commands {
             .plus(Argument.NETWORK_SSID.getArgument(properties))
             .plus(androidJunitRunner)
 
-    val pushChecker = arrayOf("adb", "push", File(properties.getProperty(CHECKER_PATH_KEY)).absolutePath,
+    val pushChecker = arrayOf("push", File(properties.getProperty(CHECKER_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.charlesmuchene.installer")
-    val installChecker = arrayOf("adb", "shell", "pm", "install", "-t", "-r",
+    val installChecker = arrayOf("shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer\"")
 
-    val pushAutomator = arrayOf("adb", "push", File(properties.getProperty(AUTOMATOR_PATH_KEY)).absolutePath,
+    val pushAutomator = arrayOf("push", File(properties.getProperty(AUTOMATOR_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.charlesmuchene.installer.test")
-    val installAutomator = arrayOf("adb", "shell", "pm", "install", "-t", "-r",
+    val installAutomator = arrayOf("shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer.test\"")
 
-    val pushSBDriverApp = arrayOf("adb", "push", File(properties.getProperty(SB_APP_PATH_KEY)).absolutePath,
+    val pushSBDriverApp = arrayOf("push", File(properties.getProperty(SB_APP_PATH_KEY)).absolutePath,
             "/data/local/tmp/com.safeboda.driver")
-    val installSBDriverApp = arrayOf("adb", "shell", "pm", "install", "-t", "-r", "-g",
+    val installSBDriverApp = arrayOf("shell", "pm", "install", "-t", "-r", "-g",
             "\"/data/local/tmp/com.safeboda.driver\"")
 
-    val bridgeVersion = arrayOf("adb", "version")
-    val verifyBridge = arrayOf("adb", "devices")
+    val bridgeVersion = arrayOf("version")
+    val verifyBridge = arrayOf("devices")
 
 
     /**
