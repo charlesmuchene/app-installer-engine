@@ -2,17 +2,22 @@ package com.charlesmuchene.installer
 
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
+import com.charlesmuchene.installer.utils.ADB_PATH_KEY
 import com.charlesmuchene.installer.utils.lineSeparator
+import com.charlesmuchene.installer.utils.properties
 import com.charlesmuchene.installer.utils.reduce
 import kotlinx.coroutines.experimental.channels.Channel
 import kotlinx.coroutines.experimental.launch
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStreamReader
 
 /**
  * Action runner class
  */
 class Runner {
+
+    private val adbPath: String by lazy { File(properties.getProperty(ADB_PATH_KEY)).absolutePath }
 
     val channel = Channel<String?>()
 
@@ -47,7 +52,8 @@ class Runner {
      */
     private fun runProcess(command: Array<String>) {
         launch {
-            val builder = ProcessBuilder(*command).apply { redirectErrorStream() }
+            val instructions = arrayOf(adbPath, *command)
+            val builder = ProcessBuilder(*instructions).apply { redirectErrorStream(true) }
             val output: String?
             try {
                 val process = builder.start()
