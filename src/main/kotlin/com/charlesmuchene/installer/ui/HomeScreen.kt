@@ -3,7 +3,7 @@ package com.charlesmuchene.installer.ui
 import com.charlesmuchene.installer.Runner
 import com.charlesmuchene.installer.models.SystemAction
 import com.charlesmuchene.installer.models.UserAction
-import com.charlesmuchene.installer.utils.driversList
+import com.charlesmuchene.installer.utils.usersList
 import com.charlesmuchene.installer.utils.lineSeparator
 import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlinx.coroutines.experimental.launch
@@ -152,7 +152,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * Load next account
      */
     private fun loadNextAccount() {
-        if (++driverListMarker > driversList.size - 1) driverListMarker = driversList.size - 1
+        if (++driverListMarker > usersList.size - 1) driverListMarker = usersList.size - 1
         setAccount(driverListMarker)
     }
 
@@ -170,7 +170,7 @@ class HomeScreen(private val runner: Runner, private val screenSize: Dimension =
      * @param index Index of the account
      */
     private fun setAccount(index: Int) {
-        val (email, password) = driversList[index]
+        val (email, password) = usersList[index]
         emailTextField.text = email
         passwordTextField.text = password
     }

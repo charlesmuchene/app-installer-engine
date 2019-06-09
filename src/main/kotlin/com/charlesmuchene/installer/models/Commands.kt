@@ -39,10 +39,10 @@ object Commands {
     val installAutomator = arrayOf("shell", "pm", "install", "-t", "-r",
             "\"/data/local/tmp/com.charlesmuchene.installer.test\"")
 
-    val pushSBDriverApp = arrayOf("push", File(properties.getProperty(SB_APP_PATH_KEY)).absolutePath,
-            "/data/local/tmp/com.safeboda.driver")
-    val installSBDriverApp = arrayOf("shell", "pm", "install", "-t", "-r", "-g",
-            "\"/data/local/tmp/com.safeboda.driver\"")
+    val pushApp = arrayOf("push", File(properties.getProperty(APP_PATH_KEY)).absolutePath,
+            "/data/local/tmp/<full-package-name>")
+    val installApp = arrayOf("shell", "pm", "install", "-t", "-r", "-g",
+            "\"/data/local/tmp/<full-package-name>\"")
 
     val bridgeVersion = arrayOf("version")
     val verifyBridge = arrayOf("devices")

@@ -19,7 +19,7 @@ enum class SystemAction {
         InitializeBridge -> Pair(Commands.bridgeVersion, Commands.verifyBridge)
         InitializeInstaller -> Pair(Commands.pushChecker, Commands.installChecker)
         InitializeAutomator -> Pair(Commands.pushAutomator, Commands.installAutomator)
-        InstallApplication -> Pair(Commands.pushSBDriverApp, Commands.installSBDriverApp)
+        InstallApplication -> Pair(Commands.pushApp, Commands.installApp)
     }
 
     override fun toString(): String =

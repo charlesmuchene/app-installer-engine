@@ -14,9 +14,9 @@ val lineSeparator: String = System.lineSeparator()
 
 val properties: Properties = loadConfiguration()
 
-val driversList: List<Pair<String, String>> by lazy {
+val usersList: List<Pair<String, String>> by lazy {
     val result = mutableListOf<Pair<String, String>>()
-    val file = File(properties.getProperty(DRIVERS_PATH_KEY))
+    val file = File(properties.getProperty(USERS_PATH_KEY))
     val reader = BufferedReader(FileReader(file))
     var line: String? = reader.readLine()
     while (line != null) {
