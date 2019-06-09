@@ -17,7 +17,7 @@ import kotlinx.coroutines.experimental.javafx.JavaFx as UI
  * Home screen
  */
 class HomeScreen(private val runner: Runner, private val screenSize: Dimension = Dimension(1080, 760))
-    : JFrame("SB Installer Engine") {
+    : JFrame("Installer Engine") {
 
     private var output = StringBuilder()
     private var driverListMarker = -1
