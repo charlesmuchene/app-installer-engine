@@ -1,4 +1,4 @@
-# Automated app Installer
+# Automated app Installer Engine
 
 Automates phone configuration and installation of the desired app.
 
@@ -12,8 +12,8 @@ setup information e.g. Wi-Fi SSID and password etc.
 The required artifacts are: 
 * platform-dependent adb [download here](https://developer.android.com/studio/releases/platform-tools.html)
 * users.csv (email,password)
-* install-automator.apk (see companion repo)
-* install-checker.apk (see companion repo)
+* install-automator.apk ([see companion repo](https://github.com/charlesmuchene/app-installer))
+* install-checker.apk ([see companion repo](https://github.com/charlesmuchene/app-installer))
 * app.apk
 
 NB: The program expects the artifacts folder to be in the same root directory as the executable.
